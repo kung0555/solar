@@ -80,9 +80,9 @@ return array (
   ),
   'thsarabunnew' => array(
     'normal' => $fontDir . '/thsarabunnew_normal_9eaa8c468f1d48c47375c7c8b49c88b6',
-    'bold' => $fontDir . '/thsarabunnew_bold_e04183b15a07ca4ca7d4277178d895ef',
-    'bold_italic' => $fontDir . '/thsarabunnew_bold_italic_64a70a2d9a571a42f5450e7d6be18b5e',
-    'italic' => $fontDir . '/thsarabunnew_italic_6384e0e57eb2a926aaaa54e9a1f1e710',
+    'bold' => $fontDir . '/thsarabunnew_bold_3486bd47a68ad53e50742c63420c160f',
+    'bold_italic' => $fontDir . '/thsarabunnew_bold_italic_1e9750e26800a4f15f8c243e9af180bd',
+    'italic' => $fontDir . '/thsarabunnew_italic_b38c30bd192463f7501a46bd379f89e5',
   ),
 );
 }; ?>

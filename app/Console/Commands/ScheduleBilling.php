@@ -3,7 +3,8 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-// use Mail;
+use Mail;
+use App\Http\Controllers\AdminController;
 
 class ScheduleBilling extends Command
 {
@@ -15,17 +16,17 @@ class ScheduleBilling extends Command
     // protected $signature = 'command:name'; ($signature ชื่อสำหรับเรียกใช้ command)
     protected $signature = 'cron:billingdaily';
 
-    public function __construct()
-    {
-        parent::__construct();
-    }
+    // public function __construct()
+    // {
+    //     parent::__construct();
+    // }
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Billing Daily';
+    protected $description = 'Billing';
 
     /**
      * Execute the console command.
@@ -35,44 +36,39 @@ class ScheduleBilling extends Command
     public function handle()
     {
 
-        // $count_contract = DB::table('contracts')->orderBy('id', 'desc')->get()->count();
+        // $AdminController = new AdminController;
+        // $AdminController->billingAuto();
+        
+        // $data["email"] = "benchapol@pico.co.th";
+        // $data["title"] = date('H:i:s');
+        // $data["body"] = "This is for testing email using smtp.";
+
+        // Mail::send('mailForm.billingSendEmail', compact('data'), function ($message) use ($data) {
+        //     $message->to($data["email"])
+        //         ->subject($data["title"]);
+        // });
 
         
-        // info("Cron Job running at " . now());
-        // $response = Http::get('https://jsonplaceholder.typicode.com/users');
-        // $users = $response->json();
+        $AdminController = new AdminController;
+        if ($AdminController->billingAuto()) {
 
-        // if (!empty($users)) {
-        //     foreach ($users as $key => $user) {
-        //         if (!User::where('email', $user['email'])->exists()) {
-        //             User::create([
-        //                 'name' => $user['name'],
-        //                 'email' => $user['email'],
-        //                 'password' => bcrypt('123456789')
-        //             ]);
-        //         }
-        //     }
-        // }
+            $data["email"] = "benchapol@pico.co.th";
+            $data["title"] = "บิลค่าไฟประจำเดือน True server ".date('H:i:s');
+            $data["body"] = "This is for testing email using smtp.";
 
+            Mail::send('mailForm.billingSendEmail', compact('data'), function ($message) use ($data) {
+                $message->to($data["email"])
+                    ->subject($data["title"]);
+            });
+        } else {
+            $data["email"] = "benchapol@pico.co.th";
+            $data["title"] = "บิลค่าไฟประจำเดือน False server " .date('H:i:s');
+            $data["body"] = "This is for testing email using smtp.";
 
-        return 0;
-        $this->info('Successfully sent daily quote to everyone.');
-
-        $data["email"] = "benchapol@pico.co.th";
-        // $pay_date = "20 ".$this->ThaiMonthYear($date_now);
-        $data["title"] = "บิลค่าไฟประจำเดือน ";
-        $data["body"] = "This is for testing email using smtp.";
-        $files = [
-            public_path('pdf/2022-05_1654016400.pdf')
-        ];
-        Mail::send('mailForm.billingSendEmail', compact('data'), function ($message) use ($data, $files) {
-            $message->to($data["email"])
-                ->subject($data["title"]);
-
-            foreach ($files as $file) {
-                $message->attach($file);
-            }
-        });
-        $this->info('Successfully sent daily quote to everyone.');
+            Mail::send('mailForm.billingSendEmail', compact('data'), function ($message) use ($data) {
+                $message->to($data["email"])
+                    ->subject($data["title"]);
+            });
+        }
     }
 }

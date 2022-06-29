@@ -31,10 +31,6 @@ class AdminController extends Controller
         return view('admin/parameter/allparameter', compact('allparameters'));
     }
 
-    // public function allparameter()
-    // {
-    //     return view('admin/parameter/allparameter');
-    // }
     public function parameterAddForm()
     {
         return view('admin/parameter/parameterAddForm');
@@ -214,9 +210,9 @@ class AdminController extends Controller
     }
     public function billingAuto()
     {
-
-        // $date_now = date('Y-05-01');
-        $date_now = date("Y-06-01");
+        $date_now = date("Y-m-d");
+        $date_now_path = date("Y-m-d H:i:s");
+        // $date_now = date("Y-06-01");// สำหรับเทส
 
         $key_id_On_Peak = $this->key_id_On_Peak;
         $key_id_Off_Peak = $this->key_id_Off_Peak;
@@ -256,8 +252,8 @@ class AdminController extends Controller
                     if ($getbilling_date < 10) {
                         $getbilling_date = '0' . $getbilling_date;
                     }
-                    // $billing_date = date("Y-m-$getbilling_date");
-                    $billing_date = date("Y-06-$getbilling_date");
+                    $billing_date = date("Y-m-$getbilling_date");
+                    // $billing_date = date("Y-06-$getbilling_date"); // สำหรับเทส
                     echo "billing_date " . $billing_date . "<br>";
 
                     if ($date_now == $billing_date) {
@@ -273,6 +269,7 @@ class AdminController extends Controller
                         // echo  $parametersBetween_date_now;
 
                         if ($parametersBetween_date_now > 0) {
+
                             echo "มีค่า Ft <br>";
 
                             // $Ft_4M_chk = DB::table('parameters')->orderBy('id', 'desc')->first();
@@ -451,6 +448,7 @@ class AdminController extends Controller
                             echo "รวมเงินที่ต้องชำระ (บาท) = " . number_format($total_amount, 2, ".", "") . "<br>";
 
                             $Billingmodel = new Billing;
+
                             $Billingmodel->ft = $ft;
                             $Billingmodel->cp = $cp;
                             $Billingmodel->ch = $ch;
@@ -475,6 +473,7 @@ class AdminController extends Controller
                             $Billingmodel->kwhh_first = $kWhh_first_DivideGain;
                             $Billingmodel->kwhh_last_ts = $kWhh_last_ts;
                             $Billingmodel->kwhh_last = $kWhh_last_DivideGain;
+
                             $Billingmodel->sum_kwh = $sum_kwh_DivideGain;
                             $Billingmodel->energy_money_kwhp = $energy_money_kWhp;
                             $Billingmodel->energy_money_kwhop = $energy_money_kWhop;
@@ -490,7 +489,7 @@ class AdminController extends Controller
 
 
                             $month_billing = date("Y-m", $start_billing / 1000);
-                            echo $month_billing;
+                            echo $month_billing . "<br>";
                             $Billingmodel->month_billing = $month_billing;
 
 
@@ -504,30 +503,41 @@ class AdminController extends Controller
                             echo "ts สุดท้ายของเดือน = " . date("Y-m-d H:i:s", $ts_last / 1000) . "<br>";
 
                             $date_now2 = $this->ThaiDate($date_now);
-                            $pay_date = "20 ".$this->ThaiMonthYear($date_now);
+                            $pay_date = "20 " . $this->ThaiMonthYear($date_now);
                             $month_billing2 = $this->ThaiMonthYear($month_billing);
-                            $date_last = $this->ThaiDate(date("Y-m-d H:i:s", $ts_last / 1000));;
+                            $date_last = $this->ThaiDate(date("Y-m-d H:i:s", $ts_last / 1000));
 
-                            $pdf = PDF::loadView('admin/billing/billingPDF', compact('kWh_meter_SN', 'contract_companyTH', 'contract_address', 'month_billing2', 'date_now2', 'contract_companyEN', 'type', 'voltage', 'date_last', 'kWhp_lastDivideGain', 'kWhp_firstDivideGain', 'kWhp_lastMinusfirst_DivideGain', 'cp', 'energy_money_kWhp', 'kWhop_last_DivideGain', 'kWhop_first_DivideGain', 'kWhop_lastMinusfirst_DivideGain', 'cop', 'energy_money_kWhop', 'kWhh_last_DivideGain', 'kWhh_first_DivideGain', 'kWhh_lastMinusfirst_DivideGain', 'ch', 'energy_money_kWhh', 'sum_kwh_DivideGain', 'EC', 'ft', 'money_ft', 'EC_Plus_money_ft', 'discount', 'amount', 'vat', 'total_amount','pay_date'));
-                            $part_pdf = "pdf/" . $month_billing . "_" . strtotime("$date_now") . ".pdf";
-                            $pdf->save("$part_pdf"); //save เฉยๆ
+                            $pdf = PDF::loadView('admin/billing/billingPDF', compact('kWh_meter_SN', 'contract_companyTH', 'contract_address', 'month_billing2', 'date_now2', 'contract_companyEN', 'type', 'voltage', 'date_last', 'kWhp_lastDivideGain', 'kWhp_firstDivideGain', 'kWhp_lastMinusfirst_DivideGain', 'cp', 'energy_money_kWhp', 'kWhop_last_DivideGain', 'kWhop_first_DivideGain', 'kWhop_lastMinusfirst_DivideGain', 'cop', 'energy_money_kWhop', 'kWhh_last_DivideGain', 'kWhh_first_DivideGain', 'kWhh_lastMinusfirst_DivideGain', 'ch', 'energy_money_kWhh', 'sum_kwh_DivideGain', 'EC', 'ft', 'money_ft', 'EC_Plus_money_ft', 'discount', 'amount', 'vat', 'total_amount', 'pay_date'));
+                            $part_pdf = "pdf/" . $month_billing . "_" . strtotime("$date_now_path") . ".pdf";
+                            $storage_path_pdf = public_path("$part_pdf");
+                            
+                            
+
+                            $pdf->save($storage_path_pdf);//save เฉยๆ
+                           
                             $Billingmodel->pdf = "$part_pdf";
 
                             $Billingmodel->save();
+                            return true;
                         } else {
                             echo "ไม่มีค่า Ft ที่มีผลบังคับใช้ <br>";
+                            return false;
                         }
                     } else {
                         echo "billing_date ไม่ตรง date_now <br>";
+                        return false;
                     }
                 } else {
                     echo "date_now < start_contract ยังไม่ถึงสัญญา<br>";
+                    return false;
                 }
             } else {
                 echo "No date contract  ====> " . $count_contract;
+                return false;
             }
         } else {
             echo "เคยทำ billing เดือนนี้แล้ว";
+            return false;
         }
     }
 
@@ -5151,10 +5161,10 @@ class AdminController extends Controller
 
                 // $date_now2 = thaidate('l j F Y', $date_now);
                 $date_now2 = $this->ThaiDate($date_now);
-                $pay_date = "20 ".$this->ThaiMonthYear($date_now);
+                $pay_date = "20 " . $this->ThaiMonthYear($date_now);
                 $month_billing2 = $this->ThaiMonthYear($month_billing);
                 $date_last = $this->ThaiDate(date("Y-m-d H:i:s", $ts_last / 1000));;
-                $pdf = PDF::loadView('admin/billing/billingPDF', compact('kWh_meter_SN', 'contract_companyTH', 'contract_address', 'month_billing2', 'date_now2', 'contract_companyEN','type', 'voltage', 'date_last', 'kWhp_lastDivideGain', 'kWhp_firstDivideGain', 'kWhp_lastMinusfirst_DivideGain', 'cp', 'energy_money_kWhp', 'kWhop_last_DivideGain', 'kWhop_first_DivideGain', 'kWhop_lastMinusfirst_DivideGain', 'cop', 'energy_money_kWhop', 'kWhh_last_DivideGain', 'kWhh_first_DivideGain', 'kWhh_lastMinusfirst_DivideGain', 'ch', 'energy_money_kWhh', 'sum_kwh_DivideGain', 'EC', 'ft', 'money_ft', 'EC_Plus_money_ft', 'discount', 'amount', 'vat', 'total_amount','pay_date'));
+                $pdf = PDF::loadView('admin/billing/billingPDF', compact('kWh_meter_SN', 'contract_companyTH', 'contract_address', 'month_billing2', 'date_now2', 'contract_companyEN', 'type', 'voltage', 'date_last', 'kWhp_lastDivideGain', 'kWhp_firstDivideGain', 'kWhp_lastMinusfirst_DivideGain', 'cp', 'energy_money_kWhp', 'kWhop_last_DivideGain', 'kWhop_first_DivideGain', 'kWhop_lastMinusfirst_DivideGain', 'cop', 'energy_money_kWhop', 'kWhh_last_DivideGain', 'kWhh_first_DivideGain', 'kWhh_lastMinusfirst_DivideGain', 'ch', 'energy_money_kWhh', 'sum_kwh_DivideGain', 'EC', 'ft', 'money_ft', 'EC_Plus_money_ft', 'discount', 'amount', 'vat', 'total_amount', 'pay_date'));
                 $part_pdf = "pdf/" . $month_billing . "_" . strtotime("$date_now") . ".pdf";
                 $pdf->save("$part_pdf"); //save เฉยๆ
 
@@ -5308,16 +5318,16 @@ class AdminController extends Controller
         // echo "ts สุดท้ายของเดือน = " . date("Y-m-d H:i:s", $ts_last / 1000) . "<br>";
 
         $date_now2 = $this->ThaiDate($date_now);
-        $pay_date = "20 ".$this->ThaiMonthYear($date_now);
+        $pay_date = "20 " . $this->ThaiMonthYear($date_now);
         // $month_billing2 = $this->ThaiMonthYear($month_billing);
         // $date_last = $this->ThaiDate(date("Y-m-d H:i:s", $ts_last / 1000));
 
         $month_billing2 = $this->ThaiMonthYear($request->month_billing);
-        $date_last_month = (new DateTime($request->month_billing."-01" ))->modify('+1 month')->format('Y-m-d');
+        $date_last_month = (new DateTime($request->month_billing . "-01"))->modify('+1 month')->format('Y-m-d');
         $date_last_Ymd = (new DateTime($date_last_month))->modify('-1 day')->format('Y-m-d');
         $date_last = $this->ThaiDate($date_last_Ymd);
 
-        $pdf = PDF::loadView('admin/billing/billingPDF', compact('kWh_meter_SN', 'contract_companyTH', 'contract_address', 'month_billing2', 'date_now2', 'contract_companyEN', 'type', 'voltage', 'date_last', 'kWhp_lastDivideGain', 'kWhp_firstDivideGain', 'kWhp_lastMinusfirst_DivideGain', 'cp', 'energy_money_kWhp', 'kWhop_last_DivideGain', 'kWhop_first_DivideGain', 'kWhop_lastMinusfirst_DivideGain', 'cop', 'energy_money_kWhop', 'kWhh_last_DivideGain', 'kWhh_first_DivideGain', 'kWhh_lastMinusfirst_DivideGain', 'ch', 'energy_money_kWhh', 'sum_kwh_DivideGain', 'EC', 'ft', 'money_ft', 'EC_Plus_money_ft', 'discount', 'amount', 'vat', 'total_amount','pay_date'));
+        $pdf = PDF::loadView('admin/billing/billingPDF', compact('kWh_meter_SN', 'contract_companyTH', 'contract_address', 'month_billing2', 'date_now2', 'contract_companyEN', 'type', 'voltage', 'date_last', 'kWhp_lastDivideGain', 'kWhp_firstDivideGain', 'kWhp_lastMinusfirst_DivideGain', 'cp', 'energy_money_kWhp', 'kWhop_last_DivideGain', 'kWhop_first_DivideGain', 'kWhop_lastMinusfirst_DivideGain', 'cop', 'energy_money_kWhop', 'kWhh_last_DivideGain', 'kWhh_first_DivideGain', 'kWhh_lastMinusfirst_DivideGain', 'ch', 'energy_money_kWhh', 'sum_kwh_DivideGain', 'EC', 'ft', 'money_ft', 'EC_Plus_money_ft', 'discount', 'amount', 'vat', 'total_amount', 'pay_date'));
         $part_pdf = "pdf/" . $request->month_billing . "_" . strtotime("$date_now") . ".pdf";
         $pdf->save("$part_pdf"); //save เฉยๆ
         $BillingManualAdd->pdf = "$part_pdf";
@@ -5526,7 +5536,7 @@ class AdminController extends Controller
 
         return redirect()->route('viewGain')->with('success', "บันทึกข้อมูล เรียบร้อย");
     }
-    
+
 
     function ts_kv_first($key_id, $start_billing)
     {
@@ -5638,18 +5648,18 @@ class AdminController extends Controller
         $data["body"] = "This is for testing email using smtp.";
 
         $title = "Mail from PICO";
- 
+
         $files = [
             public_path('pdf/2022-05_1654016400.pdf')
         ];
-  
-        Mail::send('mailForm.mailBilling', compact('title'), function($message)use($data, $files) {
+
+        Mail::send('mailForm.mailBilling', compact('title'), function ($message) use ($data, $files) {
             $message->to($data["email"])
-                    ->subject($data["title"]);
- 
-            foreach ($files as $file){
+                ->subject($data["title"]);
+
+            foreach ($files as $file) {
                 $message->attach($file);
-            }            
+            }
         });
 
         echo "Mail send successfully !!";
@@ -5665,22 +5675,22 @@ class AdminController extends Controller
 
         $data["email"] = "benchapol@pico.co.th";
         // $pay_date = "20 ".$this->ThaiMonthYear($date_now);
-        $data["title"] = "บิลค่าไฟประจำเดือน ".$this->ThaiMonthYear($billings->month_billing);
+        $data["title"] = "บิลค่าไฟประจำเดือน " . $this->ThaiMonthYear($billings->month_billing);
         $data["body"] = "This is for testing email using smtp.";
 
         // $title = "Mail from PICO";
- 
+
         $files = [
             public_path("$billings->pdf")
         ];
-  
-        Mail::send('mailForm.billingSendEmail', compact('data'), function($message)use($data, $files) {
+
+        Mail::send('mailForm.billingSendEmail', compact('data'), function ($message) use ($data, $files) {
             $message->to($data["email"])
-                    ->subject($data["title"]);
- 
-            foreach ($files as $file){
+                ->subject($data["title"]);
+
+            foreach ($files as $file) {
                 $message->attach($file);
-            }            
+            }
         });
 
         $Billingupdate = Billing::find($id);
@@ -5690,5 +5700,9 @@ class AdminController extends Controller
         return redirect()->route('allBillings')->with('success', "ส่งเมลเรียบร้อย");
 
         // echo "Mail send successfully !!";
+    }
+    public function test()
+    {
+        return true;
     }
 }

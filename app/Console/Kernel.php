@@ -4,6 +4,10 @@ namespace App\Console;
 
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\AdminController;
+
+
 
 class Kernel extends ConsoleKernel
 {
@@ -14,15 +18,27 @@ class Kernel extends ConsoleKernel
      * @return void
      */
     protected $commands = [
-        Commands\ScheduleBilling::class, //แก้ไขบรรนี้เพื่อ class command ที่เราได้สร้างขึ้น, กรณีเรามีการสร้าง command หลายๆ command เราก็มาใส่เรียงต่อๆ
+        Commands\ScheduleBilling::class, 
     ];
     protected function schedule(Schedule $schedule)
     {
         // $schedule->command('inspire')->hourly();
         // $schedule->command('cron:billingdaily')->everyMinute()->runInBackground()->timezone('Asia/Bangkok'); //แก้ไขบรรนี้เพื่อ เพื่อกำหนดความถี่ ในการทำงานของ command
         // $schedule->exec('node /admin/billing/billingAuto')->everyMinute()->timezone('Asia/Bangkok')->runInBackground(); 
-        $schedule->command('cron:billingdaily')->everyMinute();
-        // $schedule->command('cron:billingdaily')->monthlyOn(4, '15:00');;
+        // $schedule->command('cron:billingdaily')->everyMinute();
+
+       
+
+        $contract = DB::table('contracts')->orderBy('id', 'desc')->first();
+        $date = $contract->date_billing;
+        // echo $date;
+        // $schedule->command('cron:billingdaily')->monthlyOn($date, '22:17')->withoutOverlapping();
+        $schedule->command('cron:billingdaily')->everyMinute()->withoutOverlapping();
+
+        // $schedule->call(function () {
+        //     $AdminController = new AdminController;
+        //     $AdminController->sendmail();
+        // })->everyMinute();
     }
 
     /**
@@ -32,7 +48,7 @@ class Kernel extends ConsoleKernel
      */
     protected function commands()
     {
-        $this->load(__DIR__.'/Commands');
+        $this->load(__DIR__ . '/Commands');
 
         require base_path('routes/console.php');
     }
