@@ -28,9 +28,9 @@
             </div>
             <div class="card-body">
                 <p class="login-box-msg">Sign in to start your session</p>
-                @if (Session::has('error'))
+                @if (Session::has('message'))
                     <div class="alert alert-success" role="alert">
-                        {{ Session::get('error') }}
+                        {{ Session::get('message') }}
                     </div>
                 @endif
                 @if ($errors->first())

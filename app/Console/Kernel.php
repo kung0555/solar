@@ -32,8 +32,8 @@ class Kernel extends ConsoleKernel
         $contract = DB::table('contracts')->orderBy('id', 'desc')->first();
         $date = $contract->date_billing;
         // echo $date;
-        // $schedule->command('cron:billingdaily')->monthlyOn($date, '22:17')->withoutOverlapping();
-        $schedule->command('cron:billingdaily')->everyMinute()->withoutOverlapping();
+        $schedule->command('cron:billingdaily')->monthlyOn($date, '08:00')->withoutOverlapping();
+        // $schedule->command('cron:billingdaily')->everyMinute()->withoutOverlapping();
 
         // $schedule->call(function () {
         //     $AdminController = new AdminController;
