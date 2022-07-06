@@ -4,6 +4,12 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ThingsboardController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\PDFController;
+use App\Http\Controllers\RegisterController;
+use App\Http\Controllers\LoginController;
+use App\Http\Controllers\ForgotpasswordController;
+use App\Http\Controllers\ResetPasswordController;
+use App\Http\Controllers\LogoutController;
+
 
 Route::resource('thingsboard', ThingsboardController::class);
 // Route::resource('index', [ThingsboardController::class,'dashboard']);
@@ -31,7 +37,7 @@ Route::get('/admin', function () {
 
 Route::get('/', function () {
     return view('home');
-});
+})->middleware('check');
 Route::get('/home', function () {
     return view('home');
 })->name('home');
@@ -61,7 +67,8 @@ Route::post('/admin/contract/contractChk', [AdminController::class, 'contractChk
 
 
 //billing
-Route::get('/admin/billing/billingAuto', [AdminController::class, 'billingAuto'])->name('billingAuto')->middleware('check');
+Route::get('/admin/billing/billingAuto', [AdminController::class, 'billingAuto'])->name('billingAuto');
+
 Route::get('/admin/billing/allBillings', [AdminController::class, 'allBillings'])->name('allBillings')->middleware('check');
 Route::get('/admin/billing/billingManualAuto', [AdminController::class, 'billingManualAuto'])->name('billingManualAuto')->middleware('check');
 Route::post('/admin/billing/billingManualAutoChk', [AdminController::class, 'billingManualAutoChk'])->name('billingManualAutoChk')->middleware('check');
@@ -85,3 +92,53 @@ Route::get('generatePDF', [PDFController::class, 'generatePDF']);
 
 //sendmail
 Route::get('sendmail', [AdminController::class, 'sendmail']);
+
+
+// Login
+Route::group(['middleware' => ['guest']], function () {
+    Route::get('/login', function () {
+        return view('/auth/login');
+    })->name('login');
+
+    Route::post('loginChk', [LoginController::class, 'loginChk'])->name('loginChk');
+});
+// Route::group(['middleware' => ['prevent-back-history','otherMiddlewares']], function () {
+//     // Auth::routes();
+//     Route::get('/login', function () {
+//         return view('/auth/login');
+//     })->name('login');
+
+//     Route::post('loginChk', [LoginController::class, 'loginChk'])->name('loginChk');
+// });
+
+
+
+//register
+// Route::get('/register', function () {
+//     return view('/auth/register');
+// })->name('register');
+Route::get('/register', [RegisterController::class, 'show'])->name('register');
+Route::post('/registerChk', [RegisterController::class, 'registerChk'])->name('registerChk');
+
+
+//forget password
+
+Route::get('/forgot_password', [ForgotpasswordController::class, 'showForgot'])->name('forgot_password');
+Route::post('/forgotChk', [ForgotpasswordController::class, 'forgotChk'])->name('forgotChk');
+
+//recover password
+Route::get('/recover_password/{token}/{email}', [ResetPasswordController::class, 'showRecover_password'])->name('recover_password');
+Route::post('/recover_passwordChk', [ResetPasswordController::class, 'recover_passwordChk'])->name('recover_passwordChk');
+
+// Route::get('/recover_password', function () {
+//     return view('/auth/recover_password');
+// })->name('recover_password');
+
+Route::group(['middleware' => ['auth']], function () {
+    /**
+     * Logout Routes
+     */
+    Route::get('/logout', [LogoutController::class, 'logout'])->name('logout');
+
+    // Route::get('/logout', 'LogoutController@perform')->name('logout.perform');
+});

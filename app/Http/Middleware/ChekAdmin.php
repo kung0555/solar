@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Auth;
 
 class ChekAdmin
 {
@@ -17,12 +18,18 @@ class ChekAdmin
     public function handle(Request $request, Closure $next)
     {
         // if($request->user != "admin"){
-        //     return redirect('/');
+        //     return redirect('/login');
         // }
         // else{
         //     return $next($request);
         // }
-        
-        return $next($request);
+
+        // return $next($request);
+
+        if (Auth::user() &&  Auth::user()->is_admin == true) {
+            return $next($request);
+        }
+
+        return redirect('login')->with('error', 'You have not admin access');
     }
 }

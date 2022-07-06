@@ -92,12 +92,12 @@
                                     <p>View Billing</p>
                                 </a>
                             </li>
-                            <li class="nav-item">
+                            {{-- <li class="nav-item">
                                 <a href="{{ route('billingAuto') }}" class="nav-link">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>Auto Billing</p>
                                 </a>
-                            </li>
+                            </li> --}}
                             <li class="nav-item">
                                 <a href="{{ route('billingManualAuto') }}"
                                     class="nav-link {{ request()->is('admin/billing/billingManualAuto') ? 'active' : '' }}">
