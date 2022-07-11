@@ -9,6 +9,8 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\ForgotpasswordController;
 use App\Http\Controllers\ResetPasswordController;
 use App\Http\Controllers\LogoutController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\UsersmanageController;
 
 
 Route::resource('thingsboard', ThingsboardController::class);
@@ -35,12 +37,17 @@ Route::get('/admin', function () {
     return view('/admin/parameter/allvalue');
 });
 
-Route::get('/', function () {
-    return view('home');
-})->middleware('check');
-Route::get('/home', function () {
-    return view('home');
-})->name('home');
+// Route::get('/', function () {
+//     return view('home');
+// })->middleware('check');
+// Route::get('/home', function () {
+//     return view('home');
+// })->name('home');
+Route::get('/', [HomeController::class, 'index'])->name('home')->middleware('check');
+
+Route::get('/home', [HomeController::class, 'index'])->name('home')->middleware('check');
+
+Route::get('/user_home', [HomeController::class, 'user_home'])->name('user_home');
 
 
 // parameter
@@ -135,10 +142,10 @@ Route::post('/recover_passwordChk', [ResetPasswordController::class, 'recover_pa
 // })->name('recover_password');
 
 Route::group(['middleware' => ['auth']], function () {
-    /**
-     * Logout Routes
-     */
+
     Route::get('/logout', [LogoutController::class, 'logout'])->name('logout');
 
-    // Route::get('/logout', 'LogoutController@perform')->name('logout.perform');
+    Route::get('/admin/users/viewUsers', [UsersmanageController::class, 'viewUsers'])->name('viewUsers');
+    Route::get('/admin/users/userEdit/{id}', [UsersmanageController::class, 'userEdit'])->name('userEdit');
+    Route::post('/admin/users/updateUserChk/{id}', [UsersmanageController::class, 'updateUserChk'])->name('updateUserChk');
 });

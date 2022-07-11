@@ -28,6 +28,8 @@ class ChekAdmin
 
         if (Auth::user() &&  Auth::user()->is_admin == true) {
             return $next($request);
+        } elseif (Auth::user() &&  Auth::user()->is_admin != true) {
+            return redirect('user_home');
         }
 
         return redirect('login')->with('error', 'You have not admin access');
