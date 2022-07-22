@@ -50,25 +50,26 @@ class ScheduleBilling extends Command
 
         
         $AdminController = new AdminController;
-        if ($AdminController->billingAuto()) {
+        // if ($AdminController->billingAuto()) {
 
-            $data["email"] = "benchapol@pico.co.th";
-            $data["title"] = "บิลค่าไฟประจำเดือน True server ".date('H:i:s');
-            $data["body"] = "This is for testing email using smtp.";
+        //     $data["email"] = "benchapol@pico.co.th";
+        //     $data["title"] = "บิลค่าไฟประจำเดือน True server ".date('H:i:s');
+        //     $data["body"] = "This is for testing email using smtp.";
 
-            Mail::send('mailForm.billingSendEmail', compact('data'), function ($message) use ($data) {
-                $message->to($data["email"])
-                    ->subject($data["title"]);
-            });
-        } else {
-            $data["email"] = "benchapol@pico.co.th";
-            $data["title"] = "บิลค่าไฟประจำเดือน False server " .date('H:i:s');
-            $data["body"] = "This is for testing email using smtp.";
+        //     Mail::send('mailForm.billingSendEmail', compact('data'), function ($message) use ($data) {
+        //         $message->to($data["email"])
+        //             ->subject($data["title"]);
+        //     });
+        // } else {
+        //     $data["email"] = "benchapol@pico.co.th";
+        //     $data["title"] = "บิลค่าไฟประจำเดือน False server " .date('H:i:s');
+        //     $data["body"] = "This is for testing email using smtp.";
 
-            Mail::send('mailForm.billingSendEmail', compact('data'), function ($message) use ($data) {
-                $message->to($data["email"])
-                    ->subject($data["title"]);
-            });
-        }
+        //     Mail::send('mailForm.billingSendEmail', compact('data'), function ($message) use ($data) {
+        //         $message->to($data["email"])
+        //             ->subject($data["title"]);
+        //     });
+        // }
+        $AdminController->billingAuto();
     }
 }
