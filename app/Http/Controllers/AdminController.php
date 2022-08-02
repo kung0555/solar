@@ -4908,6 +4908,7 @@ class AdminController extends Controller
     {
         // $allbillings = DB::table('billings')->orderBy('id', 'asc')->get();
         $allbillings = Billing::all();
+        // $month_billing2 = $this->ThaiMonthYear($allbillings->month_billing);
         return view('admin/billing/allbillings', compact('allbillings'));
     }
 

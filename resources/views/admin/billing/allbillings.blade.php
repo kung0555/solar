@@ -35,7 +35,7 @@
                                 <thead>
                                     <tr>
                                         <th>ID</th>
-
+                                        <th>Month</th>
                                         {{-- <th>kWhp first</th> --}}
                                         {{-- <th>kWhp last</th> --}}
                                         <th>kWhp</th>
@@ -61,6 +61,8 @@
                                     @foreach ($allbillings as $allbilling)
                                         <tr>
                                             <td>{{ $allbilling->id }}</td>
+                                            <td>{{ date("M Y", strtotime("$allbilling->month_billing")) }}</td>
+
                                             {{-- <td>{{ number_format($allbilling->kwhp_first, 3, ".", "") }}</td> --}}
                                             {{-- <td>{{ number_format($allbilling->kwhp_last, 3, ".", "") }}</td> --}}
                                             <td>{{ number_format($allbilling->kwhp, 3, ".", "") }}</td>
@@ -97,6 +99,7 @@
                                 <tfoot>
                                     <tr>
                                         <th>ID</th>
+                                        <th>Month</th>
 
                                         {{-- <th>kWhp first</th> --}}
                                         {{-- <th>kWhp last</th> --}}
