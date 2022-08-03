@@ -5684,7 +5684,16 @@ class AdminController extends Controller
             ->get()->first();
 
 
-        $data["email"] = "benchapol@pico.co.th";
+
+        $users = DB::table('users')
+            ->select('email')
+            ->where('receive_mail_billing', '=', 'Yes')
+            ->get();
+        foreach ($users as $user) {
+            $mailto[] = $user->email;
+        }
+
+        $data["email"] = $mailto;
         // $pay_date = "20 ".$this->ThaiMonthYear($date_now);
         $data["title"] = "บิลค่าไฟประจำเดือน " . $this->ThaiMonthYear($billings->month_billing);
         $data["body"] = "รายละเอียดตามไฟล์แนบ";
@@ -5696,8 +5705,11 @@ class AdminController extends Controller
         ];
 
         Mail::send('mailForm.billingSendEmail', compact('data'), function ($message) use ($data, $files) {
-            $message->to($data["email"])
-                ->subject($data["title"]);
+            // $message->to($data["email"])
+            foreach ($data["email"] as $email) {
+                $message->to($email);
+            }
+            $message->subject($data["title"]);
 
             foreach ($files as $file) {
                 $message->attach($file);
@@ -5715,7 +5727,17 @@ class AdminController extends Controller
     function billingFailSendEmail($messagefail)
     {
 
-        $data["email"] = "benchapol@pico.co.th";
+        $users = DB::table('users')
+            ->select('email')
+            ->where('receive_mail_billing', '=', 'Yes')
+            ->get();
+        foreach ($users as $user) {
+            $mailto[] = $user->email;
+        }
+
+        $data["email"] = $mailto;
+
+        // $data["email"] = "benchapol@pico.co.th";
         // $pay_date = "20 ".$this->ThaiMonthYear($date_now);
         $month_now = date("Y-m");
         $data["title"] = "Fail บิลค่าไฟประจำเดือน " . $this->ThaiMonthYear($month_now);
@@ -5723,8 +5745,12 @@ class AdminController extends Controller
 
 
         Mail::send('mailForm.billingSendEmail', compact('data'), function ($message) use ($data) {
-            $message->to($data["email"])
-                ->subject($data["title"]);
+            // $message->to($data["email"])
+            foreach ($data["email"] as $email) {
+                $message->to($email);
+            }
+
+            $message->subject($data["title"]);
         });
     }
     public function test()

@@ -28,7 +28,7 @@
                     <div class="card">
                         <div class="card-header">
                             <h3 class="card-title">DataTable with features</h3>
-                            
+
                         </div>
                         <!-- /.card-header -->
                         <div class="card-body">
@@ -36,11 +36,12 @@
                                 <thead>
                                     <tr>
                                         <th>ID</th>
-                                        <th>NMAE</th>
-                                        <th>E-MAIL</th>
-                                        <th>ADMIN</th>
-                                        <th>CREATED_AT</th>
-                                        <th>UPDATED_AT</th>
+                                        <th>Name</th>
+                                        <th>E-Mail</th>
+                                        <th>Admin</th>
+                                        <th>Receive mail billing</th>
+                                        {{-- <th>Create_at</th> --}}
+                                        <th>Update_at</th>
                                         <th>Manage</th>
                                     </tr>
                                 </thead>
@@ -51,19 +52,19 @@
                                             <td>{{ $user->name }}</td>
                                             <td>{{ $user->email }}</td>
                                             <td>
-                                                @if($user->is_admin==true)
-                                                {{ "Admin" }}
+                                                @if ($user->is_admin == true)
+                                                    {{ 'Admin' }}
                                                 @else
-                                                {{ "User" }}
+                                                    {{ 'User' }}
                                                 @endif
-                                                </td>
-                                            
-                                            <td>{{ $user->created_at->format('d-m-Y H:i:s') }}</td>
+                                            </td>
+                                            <td>{{ $user->receive_mail_billing }}</td>
+                                            {{-- <td>{{ $user->created_at->format('d-m-Y H:i:s') }}</td> --}}
                                             <td>{{ $user->updated_at->format('d-m-Y H:i:s') }}</td>
                                             <td>
                                                 <a href="{{ route('userEdit', $user->id) }}"
                                                     class="btn btn-warning">Edit</a>&nbsp;
-                                                
+
                                                 {{-- <a class="btn btn-danger" id="del"
                                                     onclick="deleteConfirmation({{ $user->id }})">Delete</a> --}}
 
@@ -75,16 +76,17 @@
                                 <tfoot>
                                     <tr>
                                         <th>ID</th>
-                                        <th>NMAE</th>
-                                        <th>E-MAIL</th>
-                                        <th>ADMIN</th>
-                                        <th>CREATED_AT</th>
-                                        <th>UPDATED_AT</th>
+                                        <th>Name</th>
+                                        <th>E-Mail</th>
+                                        <th>Admin</th>
+                                        <th>Receive mail billing</th>
+                                        {{-- <th>Create_at</th> --}}
+                                        <th>Update_at</th>
                                         <th>Manage</th>
                                     </tr>
                                 </tfoot>
                             </table>
-                            
+
                         </div>
                         {{-- <div class="card-footer">
                             <a href="{{ route('parameterAddForm') }}" class="btn btn-primary">Add Parameter</a>
@@ -99,5 +101,4 @@
         </div>
         <!-- ./wrapper -->
     </div>
-    
 @endsection

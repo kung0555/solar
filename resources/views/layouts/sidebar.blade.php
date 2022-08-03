@@ -102,7 +102,7 @@
                                 <a href="{{ route('billingManualAuto') }}"
                                     class="nav-link {{ request()->is('admin/billing/billingManualAuto') ? 'active' : '' }}">
                                     <i class="far fa-circle nav-icon"></i>
-                                    <p>Manual Auto Billing</p>
+                                    <p>Adjust Billing</p>
                                 </a>
                             </li>
                             <li class="nav-item">

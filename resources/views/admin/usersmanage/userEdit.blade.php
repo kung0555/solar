@@ -51,11 +51,9 @@
                                             class="float-right">{{ $user->updated_at->format('d-m-Y H:i:s') }}</a>
                                     </li>
                                     <li class="list-group-item">
-                                        <b>Manage Permission</b> <a class="float-right"><select name="is_admin"
-                                                class="select2" data-placeholder="Pleace Select Permission"
-                                                style="width: 100%;" required>
-
-
+                                        <b>Manage Permission</b>
+                                        <a class="float-right"><select name="is_admin" class="select2"
+                                                data-placeholder="Pleace Select Permission" style="width: 100%;" required>
                                                 @if ($user->is_admin == true)
                                                     <option value="">
                                                         Pleace Select
@@ -75,7 +73,31 @@
                                                     </option>
                                                 @endif
 
-                                            </select></a>
+                                            </select>
+                                        </a>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <b>Receive mail billing</b>
+                                        <a class="float-right"><select name="receive_mail_billing" class="select2"
+                                                data-placeholder="Pleace Select Permission" style="width: 100%;" required>
+                                                @if ($user->receive_mail_billing == 'Yes')
+                                                    <option selected value="Yes">
+                                                        Yes
+                                                    </option>
+                                                    <option value="No">
+                                                        No
+                                                    </option>
+                                                @else
+                                                    <option value="Yes">
+                                                        Yes
+                                                    </option>
+                                                    <option selected value="No">
+                                                        No
+                                                    </option>
+                                                @endif
+
+                                            </select>
+                                        </a>
                                     </li>
                                 </ul>
 

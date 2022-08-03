@@ -21,6 +21,7 @@ class UsersmanageController extends Controller
     {
         $user_update = User::find($id);
         $user_update->is_admin = $request->is_admin;
+        $user_update->receive_mail_billing = $request->receive_mail_billing;
         $user_update->save();
         return redirect()->route('viewUsers')->with('success', "บันทึกข้อมูล ID : " . $id . " เรียบร้อย");
     }
